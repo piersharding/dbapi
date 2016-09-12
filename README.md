@@ -6,7 +6,7 @@ A simple read only REST based DB API generating JSON ResultSets
 
 This POC is based on Flask, PostgreSQL, and D3.  To get going you need to have Python 3.4 or better.
 
-    git clone git@git.repo/pathto/dbapi-flask.git && cd dbapi-flask
+    git clone git@github.com:piersharding/dbapi.git && cd dbapi-flask
 
 ensure that easy_install pip and virtualenv are installed:
 
