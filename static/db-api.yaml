@@ -1,0 +1,231 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: DB API
+  description: Enable REST based access to any DB
+  version: "1.0.0"
+# the domain of the service
+host: localhost:5000
+# array of all schemes that your API supports
+schemes:
+  - http
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /db:
+    get:
+      summary: Database list
+      description: |
+       The list of Databases configured.
+      tags:
+        - Databases
+      responses:
+        200:
+          description: An array of databases
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Database'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /db/{database}:
+    get:
+      summary: Database Information
+      description: |
+        Get the individual database table list.
+      parameters:
+        - name: database
+          in: path
+          description: Database name.
+          required: true
+          type: string
+      tags:
+        - Database
+        - Query
+      responses:
+        200:
+          description: A list of the tables and views for the selected database
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Table'
+        404: # 404
+          description: Item not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /db/{database}/{table}:
+    get:
+      summary: Database table schema data
+      description: |
+        Get the schema definition for an individual database table or view.
+      parameters:
+        - name: database
+          in: path
+          description: Database name.
+          required: true
+          type: string
+        - name: table
+          in: path
+          description: Table name.
+          required: true
+          type: string
+      tags:
+        - Database
+        - Table
+      responses:
+        200:
+          description: A list of the fields for the specified table.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Field'
+        404: # 404
+          description: Database or Table (or View) not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /query/{database}:
+    get:
+      summary: Database Query
+      description: |
+        Execute SQL provided.
+      parameters:
+        - name: database
+          in: path
+          description: Database name.
+          required: true
+          type: string
+        - name: sql
+          in: query
+          description: SQL passed in as query.
+          required: true
+          type: string
+      tags:
+        - Database
+        - Query
+      responses:
+        200:
+          description: An array resultset for the given query.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ResultSet'
+        400: # 404
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/BadRequest'
+        404: # 404
+          description: Database not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Database:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of Database.
+      description:
+        type: string
+        description: Description of Database.
+  Table:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of Table.
+      description:
+        type: string
+        description: Description of Table.
+  Field:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of Field.
+      description:
+        type: string
+        description: Description of Field.
+      type:
+        type: string
+        description: Field type
+      default:
+        type: string
+        description: Field default
+      autoincrement:
+        type: string
+        description: Field autoincrements eg a key field
+      nullable:
+        type: boolean
+        description: Is the field nullable
+  ResultSet:
+    description: A complex object where the attributes are the column values
+    type: object
+    properties:
+      fields:
+        type: array
+        description: Fields of result set
+        items:
+          $ref: '#/definitions/ResultSetField'
+      records:
+        type: array
+        description: Rows of result set
+        items:
+          $ref: '#/definitions/ResultSetRow'
+  ResultSetField:
+    description: A column definition of a result set record
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of Field.
+      type:
+        type: string
+        description: Field type - string, number, date
+  ResultSetRow:
+    description: A complex object where the attributes are the column values
+    type: object
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  BadRequest:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+  NotFound:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
