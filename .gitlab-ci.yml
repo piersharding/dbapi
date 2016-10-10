@@ -1,0 +1,19 @@
+build_image:
+  stage: build
+  before_script:
+    - docker info
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.local.net:4567
+    - docker build -t gitlab.local.net:4567/testgroup/test-project .
+    - docker push gitlab.local.net:4567/testgroup/test-project:latest
+    # - sudo export DEBIAN_FRONTEND=noninteractive && apt-get install make curl -y
+    # - curl -sSL -O https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && tar zxf docker-1.12.1.tgz -C /tmp
+    # - ls -latr /tmp
+
+test_image:
+  stage: test
+  before_script:
+  script:
+    - docker info
+
+# https://about.gitlab.com/2016/05/23/gitlab-container-registry/

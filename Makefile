@@ -1,8 +1,7 @@
 
 NAME = dbapi
 IMG = $(NAME)_img
-FLAVOUR = ubuntu
-DOCKERFILE = Dockerfile.$(FLAVOUR)
+DOCKERFILE = Dockerfile
 CONTAINER_EXISTS = $(shell docker ps -aqf ancestor=$(IMG))
 IMG_EXISTS = $(shell docker images -q $(IMG))
 APP_SETTINGS = config.DevelopmentConfig
