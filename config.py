@@ -6,10 +6,10 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
     SQLALCHEMY_BINDS = {
-        'maharadev': 'postgresql://postgres:password@localhost/maharadev',
-        'kong': 'postgresql://postgres:password@localhost/kong',
-        'test': 'postgresql://postgres:password@localhost/test',
-        'foodmart': 'postgresql://postgres:password@localhost/foodmart',
+        'maharadev': 'postgresql://postgres:password@postgres.local.net/maharadev',
+        'kong': 'postgresql://postgres:password@postgres.local.net/kong',
+        'test': 'postgresql://postgres:password@postgres.local.net/test',
+        'foodmart': 'postgresql://postgres:password@postgres.local.net/foodmart',
       }
 
 

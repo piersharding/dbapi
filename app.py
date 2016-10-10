@@ -22,9 +22,9 @@ WHITELISTED_KEYWORDS = ['SELECT', 'FROM', 'AS', 'JOIN', 'WITHOUT',
 # helper #
 ##########
 
-
+prefix =  os.environ.get('URL_PREFIX') if  os.environ.get('URL_PREFIX') else ''
 port =  int(os.environ.get('FLASK_PORT')) if  os.environ.get('FLASK_PORT') else 5000
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__, static_url_path=prefix)
 app.config.from_object(os.environ['APP_SETTINGS'])
 level = logging.DEBUG if app.config['DEBUG'] else logging.ERROR
 app.logger.setLevel(level)
