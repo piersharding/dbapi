@@ -6,7 +6,7 @@ CONTAINER_EXISTS = $(shell docker ps -aqf ancestor=$(IMG))
 IMG_EXISTS = $(shell docker images -q $(IMG))
 APP_SETTINGS = config.DevelopmentConfig
 URL_PREFIX = 
-FLASK_PORT = 5000
+FLASK_PORT = 80
 
 all: $(IMG).tar
 
