@@ -35,5 +35,5 @@ deploy_job:
     - echo "Container URL Prefix ${C_URL_PREFIX}"
     - echo "Container Port ${C_PORT}"
     - docker rm -f "${C_NAME}" || true
-    - docker run --rm --name "${C_NAME}" -h "${C_NAME}.local.net" -v /dev/log:/dev/log -e APP_SETTINGS="${C_APP_SETTINGS}" -e  URL_PREFIX="${C_URL_PREFIX}" -e FLASK_PORT="${C_PORT}" -d ${C_IMAGE}
+    - docker run --name "${C_NAME}" -h "${C_NAME}.local.net" -v /dev/log:/dev/log -e APP_SETTINGS="${C_APP_SETTINGS}" -e  URL_PREFIX="${C_URL_PREFIX}" -e FLASK_PORT="${C_PORT}" -d ${C_IMAGE}
   when: manual
