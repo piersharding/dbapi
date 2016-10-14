@@ -6,7 +6,7 @@ info:
   description: Enable REST based access to any DB
   version: "1.0.0"
 # the domain of the service
-host: localhost:5000
+host: dbapi.local.net
 # array of all schemes that your API supports
 schemes:
   - http
