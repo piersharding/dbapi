@@ -15,7 +15,6 @@ build_image:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.local.net:4567
     - docker build -t gitlab.local.net:4567/testgroup/test-project .
     - docker push gitlab.local.net:4567/testgroup/test-project:latest
-    - sleep 10
 
 test_image:
   tags:
@@ -23,7 +22,6 @@ test_image:
   stage: test
   script:
     - docker info
-    - sleep 10
 
 deploy_job:
   tags:

@@ -2,7 +2,7 @@
 # as a demonstration of an API spec in YAML
 swagger: '2.0'
 info:
-  title: DB API Stuff with a change
+  title: DB API New shiny title
   description: Enable REST based access to any DB
   version: "1.0.0"
 # the domain of the service
