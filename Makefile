@@ -40,10 +40,10 @@ test_docker: build
 	 -e  URL_PREFIX="$(URL_PREFIX)" \
 	 -e FLASK_PORT="$(FLASK_PORT)" \
 	 -d $(IMG)
-	@echo "URL for $(NAME) is: "
-	@echo "http://"`docker inspect --format "{{.NetworkSettings.IPAddress}}" $(NAME)`":$(FLASK_PORT)/"
-	@echo "or http://$(DB_IP):$(FLASK_PORT)/"
+	@echo "IP for $(NAME) is: "
+	@echo `docker inspect --format "{{.NetworkSettings.IPAddress}}" $(NAME)`
 	@echo "Put "`docker inspect --format "{{.NetworkSettings.IPAddress}}" $(NAME)`" $(NAME).local.net $(NAME) in your /etc/hosts file."
+	@echo "And then go to http://dbapi.local.net:$(FLASK_PORT)/"
 
 test_gunicorn:
 	 URL_PREFIX="$(URL_PREFIX)" FLASK_PORT="$(FLASK_PORT)" gunicorn -w 5  --access-logfile - --bind 0.0.0.0:${FLASK_PORT} app:app
