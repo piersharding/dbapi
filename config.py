@@ -8,7 +8,7 @@ class Config(object):
     SQLALCHEMY_BINDS = {
         'maharadev': 'postgresql://postgres:password@postgres.local.net/maharadev',
         'kong': 'postgresql://postgres:password@postgres.local.net/kong',
-        'test': 'postgresql://postgres:password@postgres.local.net/test',
+        'test': 'postgresql://postgres:password@postgres.local.net/moodle',
         'foodmart': 'postgresql://postgres:password@postgres.local.net/foodmart',
       }
 
