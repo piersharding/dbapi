@@ -1,16 +1,21 @@
 
-NAME = dbapi
-IMG = $(NAME)_img
 DOCKERFILE = Dockerfile
 CONTAINER_EXISTS = $(shell docker ps -aqf ancestor=$(IMG))
 IMG_EXISTS = $(shell docker images -q $(IMG))
 APP_SETTINGS = config.DevelopmentConfig
-URL_PREFIX = 
-FLASK_PORT = 80
-DEVICE ?= $(shell ip link show | grep BROADCAST | grep -v -E 'lxcbr|docker|br-|vboxnet' | tail -1 | cut -d: -f2 | tr -d '[:space:]')
-DB_IP = $(shell ifconfig ${DEVICE} | grep 'inet ' | awk '{print $$2}')
+URL_PREFIX =
+FLASK_PORT = 8080
 
-all: $(IMG).tar
+
+include docker.mak
+
+#REGISTRY_HOST=myregistry.io
+USERNAME=piersharding
+NAME = nexuswbhk
+IMG = $(NAME)
+
+
+all: clean reqs build
 
 clean:
 ifneq "$(strip $(CONTAINER_EXISTS))" ""
@@ -20,30 +25,26 @@ ifneq "$(strip $(IMG_EXISTS))" ""
 	docker rmi -f $(IMG)
 endif
 
-build:
-	rm -f $(IMG).tar
-	docker build -t $(IMG) -f $(DOCKERFILE) .
+reqs:
+	pipenv run pip freeze > requirements.txt
 
-$(IMG).tar: build
-	docker save -o $(IMG).tar $(IMG)
+# build: reqs
+# 	docker build -t $(IMG) -f $(DOCKERFILE) .
+# 	docker tag $(IMG):latest piersharding/$(IMG):latest
+# 	docker push piersharding/$(IMG):latest
 
 test: build
-	APP_SETTINGS="$(APP_SETTINGS)" URL_PREFIX="$(URL_PREFIX)" FLASK_PORT="$(FLASK_PORT)" python manage.py runserver
+	APP_SETTINGS="$(APP_SETTINGS)" URL_PREFIX="$(URL_PREFIX)" FLASK_PORT="$(FLASK_PORT)" pipenv run python manage.py runserver
 
 test_docker: build
-	docker run --rm -ti --name "$(NAME)" \
-	 -h '$(NAME).local.net' \
-	 --add-host postgres.local.net:$(DB_IP) \
+	docker run -ti --name "$(NAME)" \
 	 -p $(FLASK_PORT):$(FLASK_PORT) \
 	 -v /dev/log:/dev/log \
 	 -e APP_SETTINGS="$(APP_SETTINGS)" \
 	 -e  URL_PREFIX="$(URL_PREFIX)" \
 	 -e FLASK_PORT="$(FLASK_PORT)" \
 	 -d $(IMG)
-	@echo "IP for $(NAME) is: "
-	@echo `docker inspect --format "{{.NetworkSettings.IPAddress}}" $(NAME)`
-	@echo "Put "`docker inspect --format "{{.NetworkSettings.IPAddress}}" $(NAME)`" $(NAME).local.net $(NAME) in your /etc/hosts file."
-	@echo "And then go to http://dbapi.local.net:$(FLASK_PORT)/"
+	@echo "go to http://localhost:$(FLASK_PORT)/"
 
 test_gunicorn:
-	 URL_PREFIX="$(URL_PREFIX)" FLASK_PORT="$(FLASK_PORT)" gunicorn -w 5  --access-logfile - --bind 0.0.0.0:${FLASK_PORT} app:app
+	 export APP_SETTINGS="$(APP_SETTINGS)" URL_PREFIX="$(URL_PREFIX)" FLASK_PORT="$(FLASK_PORT)"  && pipenv run gunicorn -w 5  --access-logfile - --bind 0.0.0.0:$(FLASK_PORT) app:app

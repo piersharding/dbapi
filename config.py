@@ -5,12 +5,6 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'this-really-needs-to-be-changed'
-    SQLALCHEMY_BINDS = {
-        'maharadev': 'postgresql://postgres:password@postgres.local.net/maharadev',
-        'kong': 'postgresql://postgres:password@postgres.local.net/kong',
-        'test': 'postgresql://postgres:password@postgres.local.net/moodle',
-        'foodmart': 'postgresql://postgres:password@postgres.local.net/foodmart',
-      }
 
 
 class ProductionConfig(Config):
@@ -25,8 +19,6 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_ECHO = True
-
 
 class TestingConfig(Config):
     TESTING = True

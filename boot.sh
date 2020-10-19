@@ -6,7 +6,7 @@ if [ -f /etc/secret-volume/environment ]; then
     . /etc/secret-volume/environment
 fi
 
-export FLASK_PORT=${FLASK_PORT:-5000}
+export FLASK_PORT=${FLASK_PORT:-8080}
 
-cd /src/
+cd /app/
 gunicorn -w 10 --bind 0.0.0.0:${FLASK_PORT} app:app
